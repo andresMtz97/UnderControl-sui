@@ -11,7 +11,7 @@ import SwiftUI
 struct UnderControlApp: App {
     var body: some Scene {
         WindowGroup {
-            SignInView()
+            MainView()
         }
     }
 }
