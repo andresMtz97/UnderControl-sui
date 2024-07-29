@@ -7,10 +7,12 @@
 
 import Foundation
 
-class AccountDto: Codable {
+struct AccountDto: Codable, Identifiable, Hashable {
+    
     let id: Int?
     var name: String
     var balance: String
+//    let idList = UUID()
     
     enum CodingKeys: String, CodingKey {
         case id = "cuenta_id"
@@ -23,4 +25,12 @@ class AccountDto: Codable {
         self.name = name
         self.balance = balance
     }
+    
+    func hash(into hasher: inout Hasher) {
+        return hasher.combine(id)
+    }
+    
+//    static func == (lhs: AccountDto, rhs: AccountDto) -> Bool {
+//        return lhs.id == rhs.id && lhs.name == rhs.name && lhs.balance == rhs.balance
+//    }
 }

@@ -11,7 +11,11 @@ struct AccountItem: View {
     var account: AccountDto
     
     var body: some View {
-        Text(account.name)
+        HStack {
+            Text(account.name)
+            Spacer()
+            Text(account.balance.toCurrency())
+        }//.padding(.horizontal)
     }
 }
 

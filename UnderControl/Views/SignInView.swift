@@ -14,14 +14,11 @@ struct SignInView: View {
     @State var password = ""
     
     var body: some View {
-        NavigationStack {
-            ZStack {
+        ZStack {
+            NavigationStack {
                 VStack {
-                    //Header
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 400, height: 150)
+                    Header("Sign in")
                     
-                    //Body
                     Form {
                         TextField("Username", text: $vm.username)
                             .textInputAutocapitalization(.never)
@@ -35,7 +32,7 @@ struct SignInView: View {
                                 .padding(4)
                         })
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .background(Color.accentColor)
+                        .background(Color("violet_700"))
                         .foregroundColor(Color.white)
                         .cornerRadius(10)
                         .disabled(vm.loading)
@@ -44,17 +41,15 @@ struct SignInView: View {
                         Button("OK", action: { vm.error = nil })
                     })
                     
-                    //Footer
                     VStack {
                         NavigationLink("Create Account", destination: SignUpView())
                     }
                     .padding()
                 }
-                //.navigationTitle("Sign In")
-                
-                if vm.loading {
-                    UCProgressView()
-                }
+            }
+            
+            if vm.loading {
+                UCProgressView()
             }
         }
     }

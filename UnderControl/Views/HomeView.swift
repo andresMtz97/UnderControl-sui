@@ -28,6 +28,7 @@ struct HomeView: View {
                         Label("Categories", systemImage: "square.grid.2x2")
                     }
             }
+            //.formStyle(Color("violet_700"))
         }
     }
 }

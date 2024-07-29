@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ResponseDto<T: Codable>: Codable {
+struct ResponseDto<T: Codable>: Codable {
     let success: Bool?
     let status: Int?
     let message: String?
@@ -15,7 +15,21 @@ class ResponseDto<T: Codable>: Codable {
     let data: T?
 }
 
-class ValidationError: Codable {
+struct ValidationError: Codable {
     let field: String
     let messages: [String]
 }
+
+/*{
+ "success": false,
+ "status": 200,
+ "message": "Cuenta eliminada exitosamente",
+ "cuentaEliminada": {
+     "cuenta_id": 17,
+     "nombre": "Holo",
+     "saldo": "1.00",
+     "usuario_id": 6,
+     "countMovimientos": 0,
+     "tdc": null
+ }
+}*/

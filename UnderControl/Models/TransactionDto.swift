@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TransactionDto: Codable {
+struct TransactionDto: Codable {
     let id: Int?
     var type: Bool
     var category: CategoryDto? = nil

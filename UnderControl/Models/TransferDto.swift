@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TransferDto: Codable {
+struct TransferDto: Codable {
     let id: Int?
     var accountId: Int
     var account: AccountDto

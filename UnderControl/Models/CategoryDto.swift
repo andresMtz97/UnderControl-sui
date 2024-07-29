@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CategoryDto: Codable {
+struct CategoryDto: Codable, Hashable {
     let id: Int?
     var name: String
     var type: Bool

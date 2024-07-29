@@ -36,7 +36,6 @@ class HomeViewModel: ObservableObject {
             switch result {
             case .success(let accounts):
                 DataProvider.accounts = accounts
-                print("accounts \(DataProvider.accounts?.count)")
             case .failure(let error):
                 print(error)
             }
@@ -51,7 +50,6 @@ class HomeViewModel: ObservableObject {
             switch result {
             case .success(let categories):
                 DataProvider.incomeCategories = categories
-                print("income \(DataProvider.incomeCategories?.count)")
             case .failure(let error):
                 print(error)
             }
@@ -62,11 +60,10 @@ class HomeViewModel: ObservableObject {
     }
     
     func getExpenseCategories() {
-        sm.getIncomeCategories { result in
+        sm.getExpenseCategories { result in
             switch result {
             case .success(let categories):
                 DataProvider.expenseCategories = categories
-                print("expense \(DataProvider.expenseCategories?.count)")
             case .failure(let error):
                 print(error)
             }

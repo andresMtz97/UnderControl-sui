@@ -14,10 +14,10 @@ struct MovementItem: View {
             VStack {
                 Text(movement.description)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.title)
+                    .font(.headline)
                 HStack {
                     Text(movement.amount.toCurrency())
-                        .font(.title3)
+                        .font(.subheadline)
                     if let transaction = movement.transaction, let category = transaction.category {
                         Text(category.name)
                             .padding(.leading)
@@ -32,6 +32,8 @@ struct MovementItem: View {
                         .padding(.leading)
                     if let transfer = movement.transfer {
                         Image(systemName: "arrow.forward")
+                            .resizable()
+                            .frame(width: 10, height: 10)
                         Text(transfer.account.name)
                             .font(.caption)
                     }
@@ -41,7 +43,7 @@ struct MovementItem: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding()
+            
             Spacer()
             
             if let transaction = movement.transaction {
@@ -66,9 +68,7 @@ struct MovementItem: View {
                     .frame(width: 30, height: 30)
                     .foregroundColor(.blue)
             }
-        }
-        .padding(0.5)
-        
+        }        
     }
 }
 
