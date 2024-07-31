@@ -13,9 +13,7 @@ class HomeViewModel: ObservableObject {
     @Published var loadingIncomeCat = false
     @Published var loadingExpenseCat = false
     @Published var error: ResponseError? = nil
-    
-    //@Published var Movements: [MovementDto]? = nil
-    
+        
     private let sm = UnderControlServiceManager()
     
     init() {
@@ -70,23 +68,5 @@ class HomeViewModel: ObservableObject {
             }
         }
     }
-    
-//    func getMovements() {
-//        sm.getMovements { result in
-//            switch result {
-//            case .success(let movements):
-//                print(movements)
-//                DataProvider.movements = movements
-//                print("movements \(DataProvider.incomeCategories?.count)")
-//                DispatchQueue.main.async {
-//                    print(DataProvider.movements?.count)
-//                    self.loadingMovements = false
-//                }
-//            case .failure(let error):
-//                print(error)
-//            }
-//            
-//        }
-//    }
 }
 

@@ -66,11 +66,7 @@ class UnderControlServiceManager {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
                 
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-//            print(error)
-//            print("UCSM: \(response)")
-//            print("UnderControlServiceManager.swift line 38: \(error?.localizedDescription)")
-//            print(error == nil)
-            
+
             if error != nil {
                 completion(.failure(.custom(errorMessage: "An error has ocurred.\n Please try again later.")))
                 return
@@ -420,9 +416,7 @@ class UnderControlServiceManager {
                 completion(.failure(.custom(errorMessage: "An error has ocurred.")))
                 return
             }
-            
-            print(responseDto)
-            
+                        
             completion(.success(responseDto))
         }.resume()
     }
@@ -439,9 +433,6 @@ class UnderControlServiceManager {
             completion(.failure(.custom(errorMessage: "URL is not correct")))
             return
         }
-        
-        print(url)
-        print(movement)
         
         guard let token = DataProvider.user?.token else {
             completion(.failure(.custom(errorMessage: "No session.")))
@@ -469,13 +460,6 @@ class UnderControlServiceManager {
                 completion(.failure(.custom(errorMessage: "An error has ocurred.")))
                 return
             }
-            
-//            do {
-//                let responseDto = try JSONDecoder().decode(ResponseDto<MovementDto>.self, from: data)
-//                completion(.success(responseDto))
-//            } catch let e {
-//                print(e)
-//            }
             
             completion(.success(responseDto))
 

@@ -37,30 +37,6 @@ class SignUpViewModel: ObservableObject {
                     }
                 }
             }
-//            sm.addMovement(movement: movement) { result in
-//                switch result {
-//                case .success(let response):
-//                    if let success = response.success, !success, let msg = response.message {
-//                        DispatchQueue.main.async {
-//                            self.error = .custom(errorMessage: msg)
-//                            self.loading = false
-//                        }
-//                    }
-//                    if let moveDto = response.data {
-//                        DispatchQueue.main.async {
-//                            DataProvider.movements?.insert(moveDto, at: 0)
-//                            self.fetchMovements()
-//                            self.loading = false
-//                        }
-//                    }
-//                case .failure(let error):
-//                    DispatchQueue.main.async {
-//                        self.error = error
-//                        self.loading = false
-//                    }
-//                    
-//                }
-//            }
         } else {
             hasErrors = true
         }

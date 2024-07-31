@@ -15,7 +15,7 @@ struct AccountItem: View {
             Text(account.name)
             Spacer()
             Text(account.balance.toCurrency())
-        }//.padding(.horizontal)
+        }
     }
 }
 

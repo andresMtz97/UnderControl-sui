@@ -22,9 +22,7 @@ struct SignUpView: View {
                         .textInputAutocapitalization(.never)
                     SecureField("Password", text: $vm.password)
                     Button(action: {
-//                        vm.loading = true
                         vm.createUser()
-                        print("Hola mundo")
                     }, label: {
                         Text("Sign Up")
                             .bold()
@@ -35,7 +33,6 @@ struct SignUpView: View {
                     .background(Color("violet_700"))
                     .foregroundColor(Color.white)
                     .cornerRadius(10)
-//                    .disabled(vm.loading)
                 }
                 .frame(width: 400)
                 

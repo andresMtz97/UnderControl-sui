@@ -15,10 +15,8 @@ class LoginViewModel: ObservableObject {
     //@Published var isAuthenticated: Bool = false
     
     func login(completion: @escaping () -> Void) {
-        print("LoginViewModel.login()")
         loading = true
         UnderControlServiceManager().login(username: username, password: password) { result in
-            print("LoginViewModel.login() -> result")
             switch result {
             case .success(let user):
                 DataProvider.user = user

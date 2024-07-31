@@ -18,9 +18,4 @@ struct TransferDto: Codable {
         case account = "cuenta"
     }
     
-//    init(id: Int?, accountId: Int, account: AccountDto) {
-//        self.id = id
-//        self.accountId = accountId
-//        self.account = account
-//    }
 }

@@ -19,10 +19,4 @@ struct TransactionDto: Codable {
         case category = "categoria"
         case categoryId = "categoria_id"
     }
-    
-//    init(id: Int?, type: Bool, category: CategoryDto? = nil) {
-//        self.id = id
-//        self.type = type
-//        self.category = category
-//    }
 }

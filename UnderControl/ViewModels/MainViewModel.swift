@@ -15,7 +15,6 @@ class MainViewModel: ObservableObject {
         if let user = DataProvider.user {
             currentUser = user
             isSignedIn = true
-//            print(currentUser?.token)
         }
     }
 }

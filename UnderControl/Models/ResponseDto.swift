@@ -19,17 +19,3 @@ struct ValidationError: Codable {
     let field: String
     let messages: [String]
 }
-
-/*{
- "success": false,
- "status": 200,
- "message": "Cuenta eliminada exitosamente",
- "cuentaEliminada": {
-     "cuenta_id": 17,
-     "nombre": "Holo",
-     "saldo": "1.00",
-     "usuario_id": 6,
-     "countMovimientos": 0,
-     "tdc": null
- }
-}*/
