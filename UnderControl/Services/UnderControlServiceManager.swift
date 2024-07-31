@@ -29,9 +29,6 @@ class UnderControlServiceManager {
         request.httpBody = try? JSONEncoder().encode(body)
                 
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-//            print(error)
-//            print("UnderControlServiceManager.swift line 38: \(error?.localizedDescription)")
-//            print(error == nil)
             
             if error != nil {
                 completion(.failure(.custom(errorMessage: "An error has ocurred.\n Please try again later.")))
@@ -468,19 +465,62 @@ class UnderControlServiceManager {
                 return
             }
             
-//            guard let responseDto = try? JSONDecoder().decode(ResponseDto<MovementDto>.self, from: data) else {
-//                completion(.failure(.custom(errorMessage: "An error has ocurred.")))
-//                return
-//            }
-            
-            do {
-                let responseDto = try JSONDecoder().decode(ResponseDto<MovementDto>.self, from: data)
-                completion(.success(responseDto))
-            } catch let e {
-                print(e)
+            guard let responseDto = try? JSONDecoder().decode(ResponseDto<MovementDto>.self, from: data) else {
+                completion(.failure(.custom(errorMessage: "An error has ocurred.")))
+                return
             }
             
-            //completion(.success(responseDto))
+//            do {
+//                let responseDto = try JSONDecoder().decode(ResponseDto<MovementDto>.self, from: data)
+//                completion(.success(responseDto))
+//            } catch let e {
+//                print(e)
+//            }
+            
+            completion(.success(responseDto))
+
+        }.resume()
+    }
+    
+    func addUser(user: UserDto, completion: @escaping (Result<String, ResponseError>) -> Void) {
+        guard let url = URL(string: Constants.baseUrl + "usuarios/") else {
+            completion(.failure(.custom(errorMessage: "URL is not correct")))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try? JSONEncoder().encode(user)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if error != nil {
+                completion(.failure(.custom(errorMessage: "An error has ocurred.\n Please try again later.")))
+                return
+            }
+            
+            guard let data = data, error == nil else {
+                completion(.failure(.custom(errorMessage: "No data.")))
+                return
+            }
+            
+            guard let responseDto = try? JSONDecoder().decode(ResponseDto<UserDto>.self, from: data) else {
+                completion(.failure(.custom(errorMessage: "An error has ocurred.")))
+                return
+            }
+                        
+            if let success = responseDto.success, !success, let responseErrors = responseDto.errors {
+                var str = responseDto.message ?? ""
+                for e in responseErrors {
+                    for m in e.messages {
+                        str += "\n\(m)"
+                    }
+                }
+                completion(.failure(.custom(errorMessage: str)))
+                return
+            }
+            
+            completion(.success(responseDto.message ?? ""))
 
         }.resume()
     }
