@@ -12,16 +12,13 @@ class HomeViewModel: ObservableObject {
     @Published var loadingAccounts = false
     @Published var loadingIncomeCat = false
     @Published var loadingExpenseCat = false
+    @Published var error: ResponseError? = nil
     
     //@Published var Movements: [MovementDto]? = nil
     
     private let sm = UnderControlServiceManager()
     
     init() {
-        print("initHomeViewModel")
-        //print(DataProvider.user?.token)
-//        loadingMovements = true
-//        getMovements()
         loadingAccounts = true
         getAccounts()
         loadingIncomeCat = true
@@ -35,13 +32,14 @@ class HomeViewModel: ObservableObject {
         sm.getAccounts { result in
             switch result {
             case .success(let accounts):
-                DataProvider.accounts = accounts
+                DispatchQueue.main.async {
+                    DataProvider.accounts = accounts
+                    self.loadingAccounts = false
+                }
             case .failure(let error):
-                print(error)
+                self.error = error
             }
-            DispatchQueue.main.async {
-                self.loadingAccounts = false
-            }
+            
         }
     }
     
@@ -49,12 +47,12 @@ class HomeViewModel: ObservableObject {
         sm.getIncomeCategories { result in
             switch result {
             case .success(let categories):
-                DataProvider.incomeCategories = categories
+                DispatchQueue.main.async {
+                    DataProvider.incomeCategories = categories
+                    self.loadingIncomeCat = false
+                }
             case .failure(let error):
-                print(error)
-            }
-            DispatchQueue.main.async {
-                self.loadingIncomeCat = false
+                self.error = error
             }
         }
     }
@@ -63,12 +61,12 @@ class HomeViewModel: ObservableObject {
         sm.getExpenseCategories { result in
             switch result {
             case .success(let categories):
-                DataProvider.expenseCategories = categories
+                DispatchQueue.main.async {
+                    DataProvider.expenseCategories = categories
+                    self.loadingExpenseCat = false
+                }
             case .failure(let error):
-                print(error)
-            }
-            DispatchQueue.main.async {
-                self.loadingExpenseCat = false
+                self.error = error
             }
         }
     }

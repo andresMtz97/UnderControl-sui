@@ -34,7 +34,7 @@ struct MovementItem: View {
                         Image(systemName: "arrow.forward")
                             .resizable()
                             .frame(width: 10, height: 10)
-                        Text(transfer.account.name)
+                        Text(transfer.account?.name ?? "")
                             .font(.caption)
                     }
                     Spacer()

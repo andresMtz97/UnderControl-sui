@@ -88,7 +88,7 @@ class UnderControlServiceManager {
                 completion(.failure(.custom(errorMessage: "An error has ocurred.")))
                 return
             }
-
+            DataProvider.accounts = accounts
             completion(.success(accounts))
 
         }.resume()
@@ -125,7 +125,7 @@ class UnderControlServiceManager {
                 completion(.failure(.custom(errorMessage: "An error has ocurred.")))
                 return
             }
-
+            DataProvider.incomeCategories = categories
             completion(.success(categories))
 
         }.resume()
@@ -162,7 +162,7 @@ class UnderControlServiceManager {
                 completion(.failure(.custom(errorMessage: "An error has ocurred.")))
                 return
             }
-
+            DataProvider.expenseCategories = categories
             completion(.success(categories))
 
         }.resume()
@@ -199,7 +199,7 @@ class UnderControlServiceManager {
                 completion(.failure(.custom(errorMessage: "An error has ocurred.")))
                 return
             }
-            
+            DataProvider.movements =  movements
             completion(.success(movements))
 
         }.resume()
@@ -427,6 +427,61 @@ class UnderControlServiceManager {
             print(responseDto)
             
             completion(.success(responseDto))
+        }.resume()
+    }
+    
+    func addMovement(movement: MovementDto, completion: @escaping (Result<ResponseDto<MovementDto>, ResponseError>) -> Void) {
+        var route = "movimientos/"
+        if let transaction = movement.transaction {
+            route += "transaccion/" + ((transaction.type) ? "ingreso" : "egreso")
+        } else {
+            route += "transferencia"
+        }
+        
+        guard let url = URL(string: Constants.baseUrl + route) else {
+            completion(.failure(.custom(errorMessage: "URL is not correct")))
+            return
+        }
+        
+        print(url)
+        print(movement)
+        
+        guard let token = DataProvider.user?.token else {
+            completion(.failure(.custom(errorMessage: "No session.")))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try? JSONEncoder().encode(movement)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if error != nil {
+                completion(.failure(.custom(errorMessage: "An error has ocurred.\n Please try again later.")))
+                return
+            }
+            
+            guard let data = data, error == nil else {
+                completion(.failure(.custom(errorMessage: "No data.")))
+                return
+            }
+            
+//            guard let responseDto = try? JSONDecoder().decode(ResponseDto<MovementDto>.self, from: data) else {
+//                completion(.failure(.custom(errorMessage: "An error has ocurred.")))
+//                return
+//            }
+            
+            do {
+                let responseDto = try JSONDecoder().decode(ResponseDto<MovementDto>.self, from: data)
+                completion(.success(responseDto))
+            } catch let e {
+                print(e)
+            }
+            
+            //completion(.success(responseDto))
+
         }.resume()
     }
 }

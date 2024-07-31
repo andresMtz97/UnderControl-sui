@@ -10,17 +10,39 @@ import Foundation
 class MovementsViewModel: ObservableObject {
     @Published var movements = [MovementDto]()
     @Published var loading = false
+    @Published var showForm = false
     @Published var totalIncome = "0.00".toCurrency()
     @Published var totalExpense = "0.00".toCurrency()
     @Published var month = ""
+    @Published var error: ResponseError? = nil
+    @Published var validationErrors = ""
+    @Published var hasErrors = false
+    
+    //Form variables
+    @Published var description = ""
+    @Published var amount = ""
+    @Published var date = Date()
+    @Published var originAccount = -1
+    @Published var type = ""
+    @Published var str = ""
+    @Published var category: Int = -1
+    @Published var inCatSelection: Int = -1
+    @Published var exCatSelection: Int = -1
+    @Published var destinationAccount = -1
+    
+    //Form arrays for pickers
+    @Published var originAccounts: [AccountDto] = DataProvider.accounts ?? []
+    @Published var incomeCat: [CategoryDto] = DataProvider.incomeCategories ?? []
+    @Published var expenseCat: [CategoryDto] = DataProvider.expenseCategories ?? []
+    @Published var destinationAccounts: [AccountDto] = []
+    
+    let dateFormatter = DateFormatter()
     
     private let sm = UnderControlServiceManager()
     
     init() {
-        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM"
         month = dateFormatter.string(from: Date())
-        print("initMovementsViewModel")
         getMovements()
     }
     
@@ -35,7 +57,7 @@ class MovementsViewModel: ObservableObject {
                     self.loading = false
                 }
             case .failure(let error):
-                print(error)
+                self.error = error
             }
             
         }
@@ -52,21 +74,115 @@ class MovementsViewModel: ObservableObject {
                         if let incomeValue = Double(movement.amount) {
                             income += incomeValue
                         }
-                        print("income : \(income)")
                     } else {
                         if let expenseValue = Double(movement.amount) {
                             expense += expenseValue
-                            print("expense : \(expense)")
                         }
                     }
                 }
             }
-            print(income)
-            print(expense)
             totalIncome = String(income).toCurrency()
             totalExpense = String(expense).toCurrency()
         }
-        print(movements.count)
+    }
+    
+    func setCategories() {
+        category = -1
+        if type == "Income" {
+            incomeCat = DataProvider.incomeCategories ?? []
+        } else if type == "Expense" {
+            expenseCat = DataProvider.expenseCategories ?? []
+        }
+    }
+    
+    func setDestinationAccounts() {
+        destinationAccounts = originAccounts.filter{ $0.id != originAccount }
+    }
+    
+    func resetForm() {
+        description = ""
+        amount = ""
+        date = Date()
+        originAccount = -1
+        type = ""
+        category = -1
+        destinationAccount = -1
+    }
+    
+    func addMovement(_ transaction: Bool) {
+        if validateForm(transaction: transaction) {
+            loading = true
+            showForm = false
+            var transactionDto: TransactionDto? = nil
+            var transferDto: TransferDto? = nil
+            if transaction {
+                transactionDto = TransactionDto(id: nil, type: type == "Income", categoryId: category)
+            } else {
+                transferDto = TransferDto(id: nil, accountId: destinationAccount)
+            }
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let movement = MovementDto(
+                id: nil,
+                amount: amount,
+                date: dateFormatter.string(from: date),
+                description: description,
+                accountId: originAccount,
+                transaction: transactionDto,
+                transfer: transferDto
+            )
+            sm.addMovement(movement: movement) { result in
+                switch result {
+                case .success(let response):
+                    if let success = response.success, !success, let msg = response.message {
+                        DispatchQueue.main.async {
+                            self.error = .custom(errorMessage: msg)
+                            self.loading = false
+                        }
+                    }
+                    if let moveDto = response.data {
+                        DispatchQueue.main.async {
+                            DataProvider.movements?.insert(moveDto, at: 0)
+                            self.fetchMovements()
+                            self.loading = false
+                        }
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.error = error
+                        self.loading = false
+                    }
+                    
+                }
+            }
+        } else {
+            hasErrors = true
+        }
+    }
+    
+    func validateForm(transaction: Bool) -> Bool {
+        if description.isEmpty {
+            validationErrors += "\nThe description field is required."
+        }
+        if Double(amount) == nil {
+            validationErrors += "\nThe amount field must be a decimal number."
+        }
+        if originAccount == -1 {
+            validationErrors += "\nYou have to choose an Origin Account."
+        }
+        
+        if transaction {
+            if type.isEmpty {
+                validationErrors += "\nYou have to choose a type."
+            }
+            if category == -1 {
+                validationErrors += "\nYou have to choose a category."
+            }
+        } else {
+            if destinationAccount == -1 {
+                validationErrors += "\nYou have to choose a destination account."
+            }
+        }
+        
+        return validationErrors.isEmpty
     }
 }
- 

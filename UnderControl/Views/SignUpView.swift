@@ -8,19 +8,16 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @State var firstName = ""
-    @State var lastName = ""
-    @State var username = ""
-    @State var password = ""
+    @StateObject var vm = SignUpViewModel()
     
     var body: some View {
         VStack {
-            
+            Header("Sign up")
             Form {
-                TextField("First name", text: $firstName)
-                TextField("Last name", text: $lastName)
-                TextField("Username", text: $username)
-                SecureField("Password", text: $password)
+                TextField("First name", text: $vm.firstName)
+                TextField("Last name", text: $vm.lastName)
+                TextField("Username", text: $vm.username)
+                SecureField("Password", text: $vm.password)
                 Button(action: {}, label: {
                     Text("Sign Up")
                         .bold()

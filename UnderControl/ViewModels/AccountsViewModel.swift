@@ -20,19 +20,16 @@ class AccountsViewModel: ObservableObject {
     @Published var error: ResponseError? = nil
     
     init() {
-        print("initAccountsViewModel")
         fetchAccounts()
     }
     
     func fetchAccounts() {
-        print("fetching accounts")
         if let data = DataProvider.accounts {
             accounts = data
         }
     }
     
     func addAccount() {
-        print("saving new account...")
         if validateFields() {
             loading = true
             showForm = false
@@ -67,7 +64,6 @@ class AccountsViewModel: ObservableObject {
             data.name = self.name
             data.balance = self.balance
             sm.updateAccount(account: data) { result in
-                print(result)
                 switch result {
                 case .success(let response):
                     if let account = response.data {
@@ -90,7 +86,6 @@ class AccountsViewModel: ObservableObject {
 
             }
         } else {
-            print("has errors")
             hasErrors = true
         }
     }

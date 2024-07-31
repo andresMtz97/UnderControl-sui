@@ -12,6 +12,7 @@ struct UserDto: Codable {
     var name: String
     var lastname: String
     let username: String?
+    let password: String?
     let token: String?
     
     enum CodingKeys: String, CodingKey {
@@ -19,6 +20,7 @@ struct UserDto: Codable {
         case name = "nombre"
         case lastname = "ap_paterno"
         case username
+        case password
         case token
     }
 

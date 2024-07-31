@@ -143,7 +143,7 @@ class CategoriesViewModel: ObservableObject {
         }
         if !isEdit {
             if type.isEmpty {
-                validationErrors += "\nYou must choose a type."
+                validationErrors += "\nYou have to choose a type."
             }
         }
         return validationErrors.isEmpty

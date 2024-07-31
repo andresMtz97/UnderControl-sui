@@ -10,7 +10,7 @@ import Foundation
 struct TransferDto: Codable {
     let id: Int?
     var accountId: Int
-    var account: AccountDto
+    var account: AccountDto? = nil
     
     enum CodingKeys: String, CodingKey {
         case id = "movimiento_id"
@@ -18,9 +18,9 @@ struct TransferDto: Codable {
         case account = "cuenta"
     }
     
-    init(id: Int?, accountId: Int, account: AccountDto) {
-        self.id = id
-        self.accountId = accountId
-        self.account = account
-    }
+//    init(id: Int?, accountId: Int, account: AccountDto) {
+//        self.id = id
+//        self.accountId = accountId
+//        self.account = account
+//    }
 }
