@@ -18,14 +18,14 @@ struct HomeView: View {
                 MovementsView()
                     .tabItem { Label("Home", systemImage: "house") }
                 
-                AccountsView()
-                    .tabItem {
-                        Label("Accounts", systemImage: "person")
-                    }
-                
                 CategoriesView()
                     .tabItem {
                         Label("Categories", systemImage: "square.grid.2x2")
+                    }
+                
+                AccountsView()
+                    .tabItem {
+                        Label("Accounts", systemImage: "person")
                     }
             }
             //.formStyle(Color("violet_700"))
